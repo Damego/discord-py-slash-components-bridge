@@ -12,8 +12,8 @@ This lib overrides discord-interaction classes and methods for working with disc
 
 ```py
 
-#from discord_slash import SlashCommand #
-from discord_py_slash_bridge import SlashCommand()
+#from discord_slash import SlashCommand # No need anymore
+from discord_py_slash_bridge import SlashCommand
 
 bot = <commands.Bot>(...)
 slash = SlashCommand(...)
