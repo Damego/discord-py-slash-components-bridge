@@ -9,10 +9,13 @@
 This lib overrides discord-interaction classes and methods for working with discord-components components(Selects and Buttons)
 
 <h2>How to use?</h2>
+
 ```py
+
 #from discord_slash import SlashCommand #
 from discord_py_slash_bridge import SlashCommand()
 
 bot = <commands.Bot>(...)
 slash = SlashCommand(...)
+
 ```
