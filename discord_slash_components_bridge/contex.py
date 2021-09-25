@@ -1,14 +1,13 @@
-import typing
-from typing import TYPE_CHECKING
+from typing import List, Union
 
 import discord
 from discord.ext import commands
-from discord.utils import snowflake_time
-from discord_slash import error, http, model, utils
+from discord_slash import error, http, model
 from discord_slash.context import (
     InteractionContext,
     ComponentContext as _ComponentContext
     )
+from discord_components import Component, ActionRow
 from .utils import _get_components_json
 
 from .dpy_overrides import ComponentMessage
@@ -20,22 +19,17 @@ async def ic_send(
     content: str = "",
     *,
     embed: discord.Embed = None,
-    embeds: typing.List[discord.Embed] = None,
+    embeds: List[discord.Embed] = None,
     tts: bool = False,
     file: discord.File = None,
-    files: typing.List[discord.File] = None,
+    files: List[discord.File] = None,
     allowed_mentions: discord.AllowedMentions = None,
     hidden: bool = False,
     delete_after: float = None,
-    components: typing.List[dict] = None,
+    components: List[Union[ActionRow, Component, List[Component]]] = None,
 ) -> model.SlashMessage:
     """
     Sends response of the interaction.
-
-    .. warning::
-        - Since Release 1.0.9, this is completely changed. If you are migrating from older version, please make sure to fix the usage.
-        - You can't use both ``embed`` and ``embeds`` at the same time, also applies to ``file`` and ``files``.
-        - If you send files in the initial response, this will defer if it's not been deferred, and then PATCH with the message
 
     :param content:  Content of the response.
     :type content: str
@@ -56,7 +50,7 @@ async def ic_send(
     :param delete_after: If provided, the number of seconds to wait in the background before deleting the message we just sent. If the deletion fails, then it is silently ignored.
     :type delete_after: float
     :param components: Message components in the response. The top level must be made of ActionRows.
-    :type components: List[dict]
+    :type components: List[Union[ActionRow, Component, List[Component]]]
     :return: Union[discord.Message, dict]
     """
     if embed and embeds:
@@ -143,7 +137,13 @@ async def ic_send(
 InteractionContext.send = ic_send
 
 class ComponentContext(_ComponentContext):
-    def __init__(self, _http: http.SlashCommandRequest, _json: dict, _discord: typing.Union[discord.Client, commands.Bot], logger):
+    def __init__(
+        self,
+        _http: http.SlashCommandRequest,
+        _json: dict, _discord:
+        Union[discord.Client, commands.Bot],
+        logger
+        ):
         self.custom_id = self.component_id = _json["data"]["custom_id"]
         self.component_type = _json["data"]["component_type"]
         super().__init__(_http=_http, _json=_json, _discord=_discord, logger=logger)
