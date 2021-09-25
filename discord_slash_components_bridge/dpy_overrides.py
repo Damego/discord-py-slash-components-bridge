@@ -14,7 +14,6 @@ class ComponentMessage(discord.Message):
 
     def __init__(self, *, state, channel, data):
         super().__init__(state=state, channel=channel, data=data)
-        self.components = data["components"]
 
         components = []
         for i in data["components"]:

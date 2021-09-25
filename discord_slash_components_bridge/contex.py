@@ -2,7 +2,7 @@ from typing import List, Union
 
 import discord
 from discord.ext import commands
-from discord_slash import error, http, model
+from discord_slash import error, http
 from discord_slash.context import (
     InteractionContext,
     ComponentContext as _ComponentContext
@@ -11,6 +11,7 @@ from discord_components import Component, ActionRow
 from .utils import _get_components_json
 
 from .dpy_overrides import ComponentMessage
+from .model import SlashMessage
 
 
 
@@ -27,7 +28,7 @@ async def ic_send(
     hidden: bool = False,
     delete_after: float = None,
     components: List[Union[ActionRow, Component, List[Component]]] = None,
-) -> model.SlashMessage:
+) -> SlashMessage:
     """
     Sends response of the interaction.
 
@@ -53,6 +54,7 @@ async def ic_send(
     :type components: List[Union[ActionRow, Component, List[Component]]]
     :return: Union[discord.Message, dict]
     """
+    
     if embed and embeds:
         raise error.IncorrectFormat("You can't use both `embed` and `embeds`!")
     if embed:
@@ -119,7 +121,7 @@ async def ic_send(
         for file in files:
             file.close()
     if not hidden:
-        smsg = model.SlashMessage(
+        smsg = SlashMessage(
             state=self.bot._connection,
             data=resp,
             channel=self.channel or discord.Object(id=self.channel_id),
@@ -140,8 +142,8 @@ class ComponentContext(_ComponentContext):
     def __init__(
         self,
         _http: http.SlashCommandRequest,
-        _json: dict, _discord:
-        Union[discord.Client, commands.Bot],
+        _json: dict,
+        _discord: Union[discord.Client, commands.Bot],
         logger
         ):
         self.custom_id = self.component_id = _json["data"]["custom_id"]
