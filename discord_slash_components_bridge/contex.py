@@ -8,7 +8,7 @@ from discord_slash.context import (
     ComponentContext as _ComponentContext
     )
 from discord_components import Component, ActionRow
-from .utils import _get_components_json
+from discord_components.utils import _get_components_json
 
 from .dpy_overrides import ComponentMessage
 from .model import SlashMessage

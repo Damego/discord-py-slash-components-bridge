@@ -1,12 +1,11 @@
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import discord
-from discord import AllowedMentions, File, InvalidArgument, abc, http, utils
+from discord import AllowedMentions, File, Embed, Attachment, MessageFlags, InvalidArgument, abc, http, utils
 from discord.ext import commands
 from discord.http import Route
 from discord_components import Component, ActionRow, _get_component_type
-
-from .utils import _get_components_json
+from discord_components.utils import _get_components_json
 
 
 class ComponentMessage(discord.Message):
@@ -27,6 +26,68 @@ class ComponentMessage(discord.Message):
             for component in row.components:
                 if component.custom_id == custom_id:
                     return component
+
+    async def edit(
+        self,
+        content: Optional[str] = None,
+        embed: Optional[Embed] = None,
+        embeds: List[Embed] = None,
+        suppress: bool = None,
+        attachments: List[Attachment] = None,
+        allowed_mentions: Optional[AllowedMentions] = None,
+        components: List[Union[ActionRow, Component, List[Component]]] = None
+    ):
+        state = self._state
+        data = {}
+
+        if content is not None:
+            data["content"] = content
+
+        if embed is not None and embeds is not None:
+            raise InvalidArgument(
+                "cannot pass both embed and embeds parameter to edit()"
+            )
+
+        if embed is not None:
+            data["embeds"] = [embed.to_dict()]
+
+        if embeds is not None:
+            data["embeds"] = [e.to_dict() for e in embeds]
+
+        if suppress is not None:
+            flags = MessageFlags._from_value(0)
+            flags.suppress_embeds = True
+            data["flags"] = flags.value
+
+        if allowed_mentions is None:
+            if (
+                state.allowed_mentions is not None
+                and self.author.id == self._state.self_id
+            ):
+                data["allowed_mentions"] = state.allowed_mentions.to_dict()
+        elif state.allowed_mentions is not None:
+                data["allowed_mentions"] = state.allowed_mentions.merge(
+                    allowed_mentions
+                ).to_dict()
+        else:
+            data["allowed_mentions"] = allowed_mentions.to_dict()
+
+        if attachments is not None:
+            data["attachments"] = [a.to_dict() for a in attachments]
+
+        if components is not None:
+            data["components"] = _get_components_json(components)
+
+        if data:
+            await state.http.request(
+                Route(
+                    "PATCH",
+                    "/channels/{channel_id}/messages/{message_id}",
+                    channel_id=self.channel.id,
+                    message_id=self.id,
+                ),
+                json=data,
+            )
 
 
 def new_override(cls, *args, **kwargs):
@@ -310,7 +371,7 @@ async def send(
             message_reference=reference,
         )
 
-    ret = state.create_message(channel=channel, data=data)
+    ret = ComponentMessage(state=state, channel=channel, data=data)
     if delete_after is not None:
         await ret.delete(delay=delete_after)
     return ret

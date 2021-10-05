@@ -3,8 +3,9 @@ from contextlib import suppress
 
 import discord
 from discord_slash import http, error
+from discord_components.utils import _get_components_json
 
-from .dpy_overrides import ComponentMessage, _get_components_json
+from .dpy_overrides import ComponentMessage
 
 
 class SlashMessage(ComponentMessage):
