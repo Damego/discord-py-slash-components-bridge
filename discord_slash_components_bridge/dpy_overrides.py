@@ -1,8 +1,18 @@
 from typing import List, Optional, Union
 
 import discord
-from discord import AllowedMentions, File, Embed, Attachment, MessageFlags, InvalidArgument, abc, http, utils
-from discord.ext import commands
+from discord import (
+    AllowedMentions,
+    File,
+    Embed,
+    Attachment,
+    MessageFlags,
+    InvalidArgument,
+    http,
+    utils
+)
+from discord.abc import Messageable
+from discord.ext.commands import Context
 from discord.http import Route
 from discord_components import Component, ActionRow, _get_component_type
 from discord_components.utils import _get_components_json
@@ -26,6 +36,11 @@ class ComponentMessage(discord.Message):
             for component in row.components:
                 if component.custom_id == custom_id:
                     return component
+
+    async def disable_components(self) -> None:
+        await self.edit(
+            components=[row.disable_components() for row in self.components],
+        )
 
     async def edit(
         self,
@@ -377,8 +392,8 @@ async def send(
     return ret
 
 
-async def send_override(context_or_channel, *args, **kwargs):
-    if isinstance(context_or_channel, commands.Context):
+async def send_override(context_or_channel, *args, **kwargs) -> ComponentMessage:
+    if isinstance(context_or_channel, Context):
         channel = context_or_channel.channel
     else:
         channel = context_or_channel
@@ -386,4 +401,16 @@ async def send_override(context_or_channel, *args, **kwargs):
     return await send(channel, *args, **kwargs)
 
 
-abc.Messageable.send = send_override
+async def fetch_message(context_or_channel, id: int) -> ComponentMessage:
+    if isinstance(context_or_channel, Context):
+        channel = context_or_channel.channel
+    else:
+        channel = context_or_channel
+
+    state = channel._state
+    data = await state.http.get_message(channel.id, id)
+    return ComponentMessage(state=state, channel=channel, data=data)
+
+
+Messageable.send = send_override
+Messageable.fetch_message = fetch_message

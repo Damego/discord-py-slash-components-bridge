@@ -22,3 +22,11 @@ bot = commands.Bot(...)
 slash = SlashCommand(bot, ...)
 
 ```
+
+<h2>Migration from discord-components</h2>
+If you have used this, then I prepared for you some things.
+
+- Events `button_click` and `select_option` have been saved.
+- Event `interaction` now is `component`.
+- `Interaction` is not available to use. Now it's `ComponentContext` and now you need use methods of `ComponentContext`
+

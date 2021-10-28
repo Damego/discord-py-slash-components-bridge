@@ -14,8 +14,7 @@ from .dpy_overrides import ComponentMessage
 from .model import SlashMessage
 
 
-
-async def ic_send(
+async def send(
     self,
     content: str = "",
     *,
@@ -136,7 +135,7 @@ async def ic_send(
     else:
         return resp
 
-InteractionContext.send = ic_send
+InteractionContext.send = send
 
 class ComponentContext(_ComponentContext):
     def __init__(
