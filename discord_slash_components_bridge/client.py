@@ -6,10 +6,21 @@ from .contex import ComponentContext
 
 class SlashCommand(_SlashCommand):
     _components_callback = {}
+
+
     async def _on_component(self, to_use):
         ctx = ComponentContext(self.req, to_use, self._discord, self.logger)
         self._discord.dispatch("component", ctx)
 
+        # discord-interactions callback
+        callback = self.get_component_callback(
+            ctx.origin_message_id, ctx.custom_id, ctx.component_type
+        )
+        if callback is not None:
+            self._discord.dispatch("component_callback", ctx, callback)
+            await self.invoke_component_callback(callback, ctx)
+
+        # discord-components callback
         if self._components_callback.get(ctx.custom_id):
             callback_info = self._components_callback[ctx.custom_id]
             if callback_info["uses"] == 0:
