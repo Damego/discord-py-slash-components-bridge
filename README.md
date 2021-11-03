@@ -3,9 +3,10 @@
   <h3>Bridge for discord-interactions and discord-components</h3>
 </div>
 <div align="center">
-  <a href="https://pypi.org/project/discord-slash-components-bridge/"><img src="https://img.shields.io/pypi/dm/discord-slash-components-bridge?style=for-the-badge" alt="PyPI downloads"></a>
+  <a href="https://pepy.tech/project/discord-slash-components-bridge"><img src="https://static.pepy.tech/personalized-badge/discord-slash-components-bridge?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads"></a>
+  
 </div>
- 
+
 <h2>Welcome</h2>
  
 [discord-interactions](https://github.com/goverfl0w/discord-interactions) and [discord-components](https://github.com/kiki7000/discord.py-components) are incompatible and this bridge can compatible these libs.
