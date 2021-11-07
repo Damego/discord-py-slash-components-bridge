@@ -12,6 +12,10 @@
 [discord-interactions](https://github.com/goverfl0w/discord-interactions) and [discord-components](https://github.com/kiki7000/discord.py-components) are incompatible and this bridge can compatible these libs.
 This lib overrides discord-interaction classes and methods for working with discord-components components(Selects and Buttons)
 
+<h2>Installing</h2>
+
+`pip install --upgrade discord-slash-components-bridge`
+
 <h2>How to use?</h2>
 
 ```py
