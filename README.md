@@ -23,13 +23,24 @@ bot = commands.Bot(...)
 slash = SlashCommand(bot, ...)
 
 ```
+<h2>What have been fixed?</h2>
+
+Fixed `Messageable.fetch_message()` returning `discord.Message`. Now it return `ComponentMessage`
 
 <h2>Migration from discord-components</h2>
 If you have used this, then I prepared for you some things.
 
+- Now you no need `DiscordComponents(...)` in your code.
 - Events `button_click` and `select_option` have been saved.
 - Event `interaction` now is `component`.
 - `Interaction` is not available to use. Now it's `ComponentContext` and now you need use methods of `ComponentContext`
+
+<h2>If you used components of discord-py-interactions</h2>
+
+- Now You can't use components of `discord-py-interactions`. You will get error.
+- `ComponentContext.component` now return `Component` object(like `Button` or `Select`) from `discord-components` 
+- with `ComponentContext.message.components` same thing.
+
 
 <h2>Have some troubles?</h2>
 Create issue on this repository or dm me in <a href="https://discordapp.com/users/%E2%80%8B143773579320754177">Discord</a>
