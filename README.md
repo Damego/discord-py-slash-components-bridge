@@ -31,3 +31,5 @@ If you have used this, then I prepared for you some things.
 - Event `interaction` now is `component`.
 - `Interaction` is not available to use. Now it's `ComponentContext` and now you need use methods of `ComponentContext`
 
+<h2>Have some troubles?</h2>
+Create issue on this repository or dm me in <a href="https://discordapp.com/users/%E2%80%8B143773579320754177">Discord</a>
