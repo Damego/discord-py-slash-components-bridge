@@ -47,4 +47,4 @@ If you have used this, then I prepared for you some things.
 
 
 <h2>Have some troubles?</h2>
-Create issue on this repository or dm me in <a href="https://discordapp.com/users/%E2%80%8B143773579320754177">Discord</a>
+Open issue is this repository or dm me in <a href="https://discordapp.com/users/%E2%80%8B143773579320754177">Discord</a>
